@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    #app{
+        margin: 0 auto;
+        width: 400px;
+    }
+    ul{
+        list-style: none;
+    }
+    li{
+        height: 50px;
+        background: #cccc;
+        line-height: 50px;
+        
+        padding: 0 10px;
+        margin-bottom:15px;
+    }
+    .num{
+        color:red;
+        float: right;
+        
+
+    }
+    .price{
+        float:right;
+        margin-right: 10px;
+    }
+    .pink{
+        background: pink;
+    }
+
+</style>
+<body>
+    <div id="app">
+        <h1>todolist</h1>
+        <div>
+            <span>名称<input type="text" placeholder="请输入产品名" v-model="name"></span>
+            <span>价格<input type="text" placeholder="请输入产品价格" v-model="price"></span>
+            <button @click="add">添加</button>
+        </div>
+        <div>
+            <input type="text" placeholder="请输入搜素内容" v-model="search" @keyup="filterFn">
+            <button>搜索</button>
+        </div>
+        <ul>
+            <li v-for="(obj,index) in List"  @click="change(obj)" :class="{pink:obj.isChecked}" v-show="obj.isShow">
+                <input type="checkbox" v-model="obj.isChecked">
+                <span>{{obj.name}}</span>
+                <span class="num" @click.stop="del(index)">[$]</span>
+                <span class="price">{{obj.price}}</span>
+               
+            </li>
+        </ul>
+        <div>
+            <button @click="delAll()">删除选中</button>
+            <span>总价{{total()}}</span>
+        </div>
+
+    </div>
+</body>
+    <script src="vue.js"></script>
+    <script>
+        let vm=new Vue({
+            el:'#app',
+            data:{
+                List:[
+                    {
+                      name:'裤子',
+                      price:111,
+                      isChecked:false,
+                      isShow:true
+      
+                    },
+                    {
+                      name:'衣服',
+                      price:555,
+                      isChecked:false,
+                      isShow:true
+      
+                    },
+                    {
+                      name:'computer',
+                      price:6666,
+                      isChecked:false,
+                      isShow:true
+      
+                    },
+                    {
+                      name:'iphoneX',
+                      price:9999,
+                      isChecked:false,
+                      isShow:true
+      
+                    }
+                ],
+                name:'',
+                price:'',
+                search:''
+                
+            },
+            methods:{
+                add(){
+                    if(this.name && this.price){
+                        this.List.push({name:this.name,price:this.price*1,isChecked:false,isShow:true});
+                    this.name="";
+                    this.price="";
+                    this.filterFn();
+                    }
+                },
+                change(obj){
+                    obj.isChecked=!obj.isChecked;
+                },
+                del(index){
+                    this.List.splice(index,1);
+                },
+                delAll(){
+                    let arr=this.List.filter(function(obj){
+                        return!obj.isChecked;
+                    })
+                    this.List=[...arr];
+                },
+                filterFn(){
+                    let value=this.search;
+                    this.List.forEach(function(obj,index){
+                        if(obj.name.includes(value)){
+                            obj.isShow=true;
+                        }else{
+                            obj.isShow=false;
+                        }
+                    })
+                },
+                total(){
+                    let sum=0;
+                    this.List.forEach(function(obj){
+                        if(obj.isChecked){
+                            sum+=obj.price;
+                        }
+                        
+                    })
+                    return sum;
+                }
+            }
+        })
+    
+    </script>
+</html>

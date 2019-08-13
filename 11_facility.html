@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <span>
+            是否需要额外付费设施
+            <input type="checkbox" v-model="isShow" @click="fn()">
+        </span>
+        <ul v-show="isShow">
+            <li v-for="obj in list">
+                {{obj.name}}({{obj.price}})
+                <input type="checkbox" :value="obj" v-model="orderList">
+            </li>
+        </ul>
+        <p>订单费用信息</p>
+        <ul>
+            
+            <li v-for="obj in orderList">{{obj.name}}({{obj.price}})</li>
+        </ul>
+        <span>总金额:{{total}}</span>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            list:[
+            {
+                name:'沙发',
+                price:(100)
+            },
+            {
+                name:'wifi',
+                price:(50)
+            },
+            {
+                name:'电脑',
+                price:(200)
+            }
+        ],
+            orderList:[
+                {name:"群里花园豪华型",price:400}            
+            ],
+            isShow:false,
+            
+            
+
+        },
+        methods:{
+
+                fn(){
+                    this.orderList.splice(1);
+                },
+
+           
+                total(){
+
+                let sum=0;
+                this.orderList.forEach(function(obj,index){
+                    sun+=obj.price;
+                });
+                return sum;
+            }
+
+        }
+
+        
+    })
+</script>
+</html>
